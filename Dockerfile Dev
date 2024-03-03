@@ -1,0 +1,26 @@
+FROM node:21.6.1 as build
+WORKDIR /app
+COPY package*.json .
+RUN npm install
+COPY . .
+
+FROM nginx:1.25.4
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+#COPY nginx/nginx.conf /etc/nginx/nginx.conf
+
+COPY --from=build /app/build /usr/share/nginx/html
+
+#docker build -t frontend . 
+
+# FROM node:14 as build
+# WORKDIR /app
+# COPY package*.json .
+# RUN npm install
+
+# FROM nginx:1.25.4
+# COPY nginx/nginx.conf /etc/nginx/nginx.conf
+
+# COPY --from=build /app/build /usr/share/nginx/html
+#docker build -t frontend .
+#docker tag frontend 768280647702.dkr.ecr.ap-southeast-1.amazonaws.com/frontend ecr
+#docker push 768280647702.dkr.ecr.ap-southeast-1.amazonaws.com/frontend ecr port80
